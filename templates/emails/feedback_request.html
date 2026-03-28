@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Issue Resolved - {{ company_name }}{% endblock %}
+
+{% block content %}
+<div class="container container-sm animate-fade-in">
+    
+    <!-- Success Header -->
+    <div class="card text-center mb-6" style="background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);">
+        <div class="text-5xl mb-3 animate-bounce">✅</div>
+        <h1 class="text-2xl font-bold text-white mb-2">
+            Issue Resolved!
+        </h1>
+        <p class="text-sm text-white opacity-90">
+            {{ company_name }}
+        </p>
+    </div>
+
+    <!-- Customer Greeting -->
+    <div class="card mb-6">
+        <p class="text-base text-secondary mb-4">
+            Hi {{ customer_name }},
+        </p>
+        
+        <p class="text-base text-secondary mb-4">
+            Great news! We've resolved your complaint:
+        </p>
+        
+        <div class="p-4 bg-bg rounded-md border-left-primary mb-4">
+            <p class="text-sm font-bold text-primary">
+                "{{ complaint_subject }}"
+            </p>
+        </div>
+        
+        <p class="text-sm text-secondary">
+            📅 Resolved on: <strong>{{ resolved_date }}</strong>
+        </p>
+    </div>
+
+    <!-- Feedback Request -->
+    <div class="card mb-6 text-center">
+        <div class="text-4xl mb-3">🌟</div>
+        <h2 class="text-lg font-bold text-primary mb-2">
+            How Did We Do?
+        </h2>
+        <p class="text-sm text-secondary mb-4">
+            Your feedback helps us improve our service for everyone.
+        </p>
+        
+        <!-- Star Display -->
+        <div class="text-3xl mb-4 text-warning">
+            ⭐⭐⭐⭐⭐
+        </div>
+        
+        <!-- Feedback Link Button -->
+        <a href="{{ feedback_link }}" class="btn btn-primary btn-lg mb-4">
+            ⭐ Rate Your Experience
+        </a>
+        
+        <!-- Security Note -->
+        <div class="p-3 bg-warning rounded-md">
+            <p class="text-xs text-muted">
+                ⚠️ This link is unique to your complaint and can only be used once.
+            </p>
+        </div>
+    </div>
+
+    <!-- Closing Message -->
+    <div class="card mb-6 text-center">
+        <p class="text-base text-secondary mb-2">
+            Thank you for giving us the opportunity to help!
+        </p>
+        <p class="text-sm font-medium text-primary">
+            — The {{ company_name }} Team
+        </p>
+    </div>
+
+    <!-- Footer Info -->
+    <div class="card text-center bg-bg">
+        <p class="text-xs text-secondary mb-2">
+            This email was sent regarding complaint <strong>#{{ complaint.id }}</strong>
+        </p>
+        <p class="text-xs text-muted">
+            &copy; {{ company_name }}. All rights reserved.
+        </p>
+    </div>
+
+</div>
+{% endblock %}

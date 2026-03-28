@@ -1,0 +1,20 @@
+Hi {{ customer_name }},
+
+Great news! We've resolved your complaint:
+"{{ complaint_subject }}"
+
+Resolved on: {{ resolved_date }}
+
+🌟 How did we do?
+Your feedback helps us improve our service for everyone.
+
+Rate your experience: {{ feedback_link }}
+
+This link is unique to your complaint and can only be used once.
+
+Thank you for giving us the opportunity to help!
+— The {{ company_name }} Team
+
+---
+This email was sent regarding complaint #{{ complaint.id }}
+© {{ company_name }}. All rights reserved.

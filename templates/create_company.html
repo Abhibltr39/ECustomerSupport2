@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register Company - E Customer Support{% endblock %}
+
+{% block content %}
+<div class="container container-md animate-fade-in">
+    
+    <!-- Registration Card -->
+    <div class="card">
+        
+        <!-- Header -->
+        <div class="card-header text-center">
+            <div class="text-5xl mb-3">🏢</div>
+            <h1 class="text-2xl font-bold text-primary mb-2">
+                Register Your Company
+            </h1>
+            <p class="text-sm text-secondary mb-4">
+                Join our customer support platform and start managing inquiries
+            </p>
+            
+            <!-- Progress Indicator -->
+            <div class="flex items-center justify-center gap-3 py-3 px-4 bg-bg rounded-md">
+                <div class="flex flex-col items-center gap-1">
+                    <span class="w-8 h-8 rounded-full bg-success text-white flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="text-xs text-success font-semibold">Account</span>
+                </div>
+                <div class="w-10 h-1 bg-gradient rounded"></div>
+                <div class="flex flex-col items-center gap-1">
+                    <span class="w-8 h-8 rounded-full bg-gradient text-white flex items-center justify-center text-sm font-bold">2</span>
+                    <span class="text-xs text-primary font-semibold">Company</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="my-4">
+            {% for message in messages %}
+            <div class="message {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}">
+                {% if message.tags == 'success' %}✅{% elif message.tags == 'error' %}❌{% elif message.tags == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Form Errors -->
+        {% if form.errors %}
+        <div class="bg-error border-left-error p-4 rounded-md mb-4">
+            <div class="flex items-center gap-2 text-error font-semibold mb-2">
+                <span>⚠️</span>
+                Please correct the following errors:
+            </div>
+            <ul class="text-error text-sm">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                    <li class="py-1">• {{ field.label }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                <li class="py-1">• {{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        <!-- Company Registration Form -->
+        <form method="POST" enctype="multipart/form-data" class="my-4">
+            {% csrf_token %}
+            
+            <!-- Section 1: Basic Information -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
+                    <span>📋</span> Basic Information
+                </h2>
+                
+                <div class="grid grid-2 gap-4">
+                    <!-- Company Name -->
+                    <div class="form-group">
+                        <label for="company_name" class="form-label">
+                            <span>🏷️</span> Company Name <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="company_name" 
+                            name="company_name" 
+                            class="form-input" 
+                            placeholder="Enter your company name"
+                            required
+                        >
+                    </div>
+
+                    <!-- Company Email -->
+                    <div class="form-group">
+                        <label for="company_email" class="form-label">
+                            <span>📧</span> Company Email <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="email" 
+                            id="company_email" 
+                            name="company_email" 
+                            class="form-input" 
+                            placeholder="your@company.com"
+                            required
+                        >
+                    </div>
+
+                    <!-- Company Phone -->
+                    <div class="form-group">
+                        <label for="company_phone" class="form-label">
+                            <span>📱</span> Company Phone <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="tel" 
+                            id="company_phone" 
+                            name="company_phone" 
+                            class="form-input" 
+                            placeholder="+91 1234567890"
+                            required
+                        >
+                    </div>
+
+                    <!-- Business Type -->
+                    <div class="form-group">
+                        <label for="business_type" class="form-label">
+                            <span>💼</span> Business Type <span class="text-error">*</span>
+                        </label>
+                        <select 
+                            id="business_type" 
+                            name="business_type" 
+                            class="form-select"
+                            required
+                        >
+                            <option value="">Select Business Type</option>
+                            <option value="retail">🛍️ Retail</option>
+                            <option value="services">🤝 Services</option>
+                            <option value="manufacturing">🏭 Manufacturing</option>
+                            <option value="technology">💻 Technology</option>
+                            <option value="other">📦 Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Company Details -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
+                    <span>📍</span> Company Details
+                </h2>
+                
+                <!-- Address Line 1 -->
+                <div class="form-group">
+                    <label for="address_line1" class="form-label">
+                        <span>🏠</span> Address Line 1 <span class="text-error">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="address_line1" 
+                        name="address_line1" 
+                        class="form-input" 
+                        placeholder="Street address, P.O. box"
+                        required
+                    >
+                </div>
+
+                <!-- Address Line 2 -->
+                <div class="form-group">
+                    <label for="address_line2" class="form-label">
+                        <span>🏢</span> Address Line 2 <span class="text-muted">(Optional)</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="address_line2" 
+                        name="address_line2" 
+                        class="form-input" 
+                        placeholder="Apartment, suite, unit, building"
+                    >
+                </div>
+
+                <!-- City, State, Pincode -->
+                <div class="grid grid-3 gap-4">
+                    <div class="form-group">
+                        <label for="city" class="form-label">
+                            <span>🏙️</span> City <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="city" 
+                            name="city" 
+                            class="form-input" 
+                            placeholder="City"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state" class="form-label">
+                            <span>🗺️</span> State / Province <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="state" 
+                            name="state" 
+                            class="form-input" 
+                            placeholder="State"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pincode" class="form-label">
+                            <span>📮</span> Pincode / ZIP <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="pincode" 
+                            name="pincode" 
+                            class="form-input" 
+                            placeholder="PIN code"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Country -->
+                <div class="form-group">
+                    <label for="country" class="form-label">
+                        <span>🌍</span> Country <span class="text-error">*</span>
+                    </label>
+                    <select 
+                        id="country" 
+                        name="country" 
+                        class="form-select"
+                        required
+                    >
+                        <option value="">-- Select Country --</option>
+                        <option value="IN">🇮🇳 India</option>
+                        <option value="US">🇺🇸 United States</option>
+                        <option value="CA">🇨 Canada</option>
+                        <option value="GB">🇬🇧 United Kingdom</option>
+                        <option value="AU">🇦🇺 Australia</option>
+                    </select>
+                </div>
+
+                <!-- GST Number -->
+                <div class="form-group">
+                    <label for="gst_number" class="form-label">
+                        <span>📄</span> GST Number <span class="text-error">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="gst_number" 
+                        name="gst_number" 
+                        class="form-input" 
+                        placeholder="Enter GST identification number"
+                        required
+                    >
+                    <div class="form-hint">Format: 22AAAAA0000A1Z5</div>
+                </div>
+
+                <!-- Company Description -->
+                <div class="form-group">
+                    <label for="description" class="form-label">
+                        <span>📝</span> Company Description <span class="text-muted">(Optional)</span>
+                    </label>
+                    <textarea 
+                        id="description" 
+                        name="description" 
+                        class="form-textarea" 
+                        placeholder="Tell us about your company and services..."
+                        rows="4"
+                    ></textarea>
+                </div>
+
+                <!-- Company Logo -->
+                <div class="form-group">
+                    <label for="logo" class="form-label">
+                        <span>🖼️</span> Company Logo <span class="text-muted">(Optional)</span>
+                    </label>
+                    <div class="border-2 border-dashed border-primary bg-bg p-6 rounded-md text-center">
+                        <input 
+                            type="file" 
+                            id="logo" 
+                            name="logo" 
+                            class="form-input"
+                            accept="image/*"
+                        >
+                        <p class="text-sm text-primary font-medium mt-2">Choose a logo file</p>
+                        <p class="text-xs text-muted">PNG, JPG, max 2MB</p>
+                    </div>
+                    {% if file_name %}
+                    <div class="mt-2 p-2 bg-success rounded text-sm text-success">
+                        📄 {{ file_name }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-success btn-lg w-100 mb-4">
+                🚀 Register Company
+            </button>
+        </form>
+        
+        <!-- Login Link -->
+        <div class="card-footer text-center">
+            <p class="text-sm text-secondary mb-3">
+                Already have a company account?
+            </p>
+            <a href="{% url 'login' %}" class="btn btn-outline">
+                🔐 Login here
+            </a>
+        </div>
+        
+        <!-- Security Note -->
+        <div class="text-center mt-4 pt-4 border-top">
+            <p class="text-xs text-muted mb-1">
+                🔒 Your company data is encrypted and secure
+            </p>
+            <p class="text-xs text-muted">
+                📞 Need help? <a href="#" class="text-primary">Contact Support</a>
+            </p>
+        </div>
+        
+    </div>
+    
+</div>
+{% endblock %}

@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Company Dashboard - E Customer Support{% endblock %}
+
+{% block content %}
+<div class="container animate-fade-in">
+    
+    <!-- Company Header -->
+    <div class="card bg-gradient mb-6">
+        <div class="flex items-center gap-4 flex-wrap">
+            <div class="text-5xl">
+                {% if company.logo %}
+                    <img src="{{ company.logo.url }}" alt="{{ company.company_name }}" class="w-20 h-20 rounded-full object-cover bg-white p-2">
+                {% else %}
+                    🏢
+                {% endif %}
+            </div>
+            <div class="flex-1">
+                <h1 class="text-2xl font-bold text-primary mb-1">
+                    Welcome, {{ company.company_name }}!
+                </h1>
+                <p class="text-sm text-white opacity-90">
+                    {{ company.get_business_type_display }}
+                </p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+                <a href="{% url 'company_profile' company.slug %}" class="btn btn-sm" style="background: white; color: var(--color-primary);">
+                    👤 View Profile
+                </a>
+                <a href="{% url 'edit_company' company.slug %}" class="btn btn-sm" style="background: white; color: var(--color-primary);">
+                    ✏️ Edit Info
+                </a>
+                 <a href="{% url 'company_feedback' company.slug %}" class="btn btn-sm" style="background: white; color: var(--color-primary);">
+                    ⭐ View Feedback
+                 </a>
+                <a href="{% url 'user_dashboard' %}" class="btn btn-sm btn-outline">
+                    🏠 User Dashboard
+                </a>
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-error">
+                    🚪 Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-4 gap-4 mb-6">
+        <div class="card text-center border-left-primary">
+            <div class="text-3xl mb-2">📋</div>
+            <div class="text-2xl font-bold text-primary">{{ form_links.count }}</div>
+            <div class="text-xs text-secondary">Form Links</div>
+        </div>
+        <div class="card text-center border-left-success">
+            <div class="text-3xl mb-2">💬</div>
+            <div class="text-2xl font-bold text-success">{{ complaints.count }}</div>
+            <div class="text-xs text-secondary">Total Complaints</div>
+        </div>
+        <div class="card text-center border-left-warning">
+            <div class="text-3xl mb-2">⏳</div>
+            <div class="text-2xl font-bold text-warning">{{ pending_complaints|default:0 }}</div>
+            <div class="text-xs text-secondary">Pending</div>
+        </div>
+        <div class="card text-center border-left-info">
+            <div class="text-3xl mb-2">⭐</div>
+            <div class="text-2xl font-bold text-primary">{{ total_feedback|default:0 }}</div>
+            <div class="text-xs text-secondary">Feedback</div>
+        </div>
+    </div>
+
+    <!-- Generate Form Link Section -->
+    <div class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-lg font-bold text-primary flex items-center gap-2">
+                <span>🔗</span> Generate New Form Link
+            </h2>
+            <p class="text-sm text-secondary">Create a new feedback form for your customers</p>
+        </div>
+        <form method="POST" class="flex items-end gap-4 flex-wrap">
+            {% csrf_token %}
+            <div class="form-group flex-1 min-w-64">
+                <label for="form_type" class="form-label">
+                    <span>📝</span> Select Form Type
+                </label>
+                <select id="form_type" name="form_type" class="form-select" required>
+                    <option value="">Choose a form type...</option>
+                    {% for key, value in form_types %}
+                    <option value="{{ key }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success btn-lg">
+                🚀 Generate Link
+            </button>
+        </form>
+    </div>
+
+    <!-- Form Links Section -->
+    <div class="card mb-6">
+        <div class="card-header">
+            <h2 class="text-lg font-bold text-primary flex items-center gap-2">
+                <span>📎</span> Your Form Links
+            </h2>
+            <p class="text-sm text-secondary">Share these links with your customers to collect feedback</p>
+        </div>
+        
+        {% if form_links %}
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-bg">
+                    <tr>
+                        <th class="text-left p-3 text-sm font-semibold text-primary">📋 Form Type</th>
+                        <th class="text-left p-3 text-sm font-semibold text-primary">🔗 Link</th>
+                        <th class="text-left p-3 text-sm font-semibold text-primary">📅 Created At</th>
+                        <th class="text-left p-3 text-sm font-semibold text-primary">⚡ Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for link in form_links %}
+                    <tr class="border-bottom hover:bg-bg">
+                        <td class="p-3">
+                            <span class="badge badge-primary">{{ link.get_form_type_display }}</span>
+                        </td>
+                        <td class="p-3">
+                            <a href="{{ link.form_link }}" target="_blank" class="text-primary text-sm hover:underline">
+                                🔗 {{ link.form_link|truncatechars:50 }}
+                            </a>
+                        </td>
+                        <td class="p-3 text-sm text-secondary">
+                            {{ link.created_at|date:"M d, Y H:i" }}
+                        </td>
+                        <td class="p-3">
+                            <button class="btn btn-sm btn-outline" onclick="navigator.clipboard.writeText('{{ link.form_link }}')">
+                                📋 Copy
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-10">
+            <div class="text-5xl mb-3">📭</div>
+            <p class="text-secondary">No form links generated yet.</p>
+            <p class="text-sm text-muted">Generate your first form link above!</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Submitted Complaints Section -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="text-lg font-bold text-primary flex items-center gap-2">
+                <span>💬</span> Submitted Complaints
+            </h2>
+            <p class="text-sm text-secondary">Manage and respond to customer complaints</p>
+        </div>
+        
+        {% if complaints %}
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-bg">
+                    <tr>
+                        <th class="text-left p-3 text-sm font-semibold text-primary">👤 Customer</th>
+                        <th class="text-left p-3 text-sm font-semibold text-primary">📧 Contact</th>
+                        <th class="text-left p-3 text-sm font-semibold text-primary">📝 Subject</th>
+                        <th class="text-left p-3 text-sm font-semibold text-primary">💭 Message</th>
+                        <th class="text-left p-3 text-sm font-semibold text-primary">📊 Status</th>
+                        <th class="text-left p-3 text-sm font-semibold text-primary">⚙️ Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for complaint in complaints %}
+                    <tr class="border-bottom hover:bg-bg {% if complaint.is_resolved %}bg-success{% endif %}">
+                        <td class="p-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient text-white flex items-center justify-center text-sm font-bold">
+                                    {{ complaint.name|first|upper }}
+                                </div>
+                                <span class="text-sm font-medium">{{ complaint.name }}</span>
+                            </div>
+                        </td>
+                        <td class="p-3">
+                            <div class="text-sm">
+                                <p class="text-secondary">📧 {{ complaint.email }}</p>
+                                <p class="text-secondary">📞 {{ complaint.phone }}</p>
+                            </div>
+                        </td>
+                        <td class="p-3">
+                            <span class="text-sm font-medium">{{ complaint.subject }}</span>
+                        </td>
+                        <td class="p-3">
+                            <p class="text-sm text-secondary">{{ complaint.message|truncatechars:80 }}</p>
+                        </td>
+                        <td class="p-3">
+                            {% if complaint.is_resolved %}
+                            <span class="badge badge-success">✅ Resolved</span>
+                            {% else %}
+                            <span class="badge badge-warning">⏳ Pending</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3">
+                            {% if not complaint.is_resolved %}
+                            <form method="POST" class="inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="complaint_id" value="{{ complaint.id }}">
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    ✔ Mark Resolved
+                                </button>
+                            </form>
+                            {% else %}
+                            <span class="text-success text-sm font-medium">✔ Completed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-10">
+            <div class="text-5xl mb-3">🎉</div>
+            <p class="text-secondary">No complaints yet.</p>
+            <p class="text-sm text-muted">Great job! Keep up the excellent service.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

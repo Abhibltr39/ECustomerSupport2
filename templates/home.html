@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - E Customer Support{% endblock %}
+
+{% block content %}
+<div class="container animate-fade-in">
+    
+    <!-- Hero Section -->
+    <section class="card text-center mb-6 bg-gradient">
+        <div class="text-5xl mb-4">🎧</div>
+        <h1 class="text-3xl font-bold text-primary mb-2">
+            Welcome to Customer Support System
+        </h1>
+        <p class="text-lg text-primary opacity-90">
+            Your Gateway to Excellent Customer Service
+        </p>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="grid grid-3 gap-5 mb-6">
+        <!-- Card 1 -->
+        <div class="card text-center">
+            <div class="text-4xl mb-3">💬</div>
+            <h2 class="text-xl font-semibold text-primary mb-2">Manage Inquiries</h2>
+            <p class="text-sm text-secondary">
+                Our customer support system is designed to help you manage and respond to customer inquiries efficiently.
+            </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card text-center">
+            <div class="text-4xl mb-3">❓</div>
+            <h2 class="text-xl font-semibold text-primary mb-2">Get Assistance</h2>
+            <p class="text-sm text-secondary">
+                Whether you have a question, feedback, or need assistance, we're here to help you every step of the way.
+            </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card text-center">
+            <div class="text-4xl mb-3">📊</div>
+            <h2 class="text-xl font-semibold text-primary mb-2">Track Tickets</h2>
+            <p class="text-sm text-secondary">
+                Log in to your account to access your dashboard and manage your support tickets with ease.
+            </p>
+        </div>
+    </section>
+
+    <!-- Action Section -->
+    <section class="grid grid-2 gap-5 mb-6">
+        <!-- Login Box -->
+        <div class="card border-left-primary">
+            <h3 class="text-lg font-semibold text-primary mb-2">
+                Already Have an Account?
+            </h3>
+            <p class="text-sm text-secondary mb-4">
+                Access your dashboard and manage your tickets
+            </p>
+            <a href="{% url 'login' %}" class="btn btn-success btn-lg w-100">
+                🔐 Company Login
+            </a>
+        </div>
+
+        <!-- Register Box -->
+        <div class="card border-left-success">
+            <h3 class="text-lg font-semibold text-primary mb-2">
+                New to Our System?
+            </h3>
+            <p class="text-sm text-secondary mb-4">
+                Create an account to get started today
+            </p>
+            <a href="{% url 'user_register' %}" class="btn btn-success btn-lg w-100">
+                ✨ Register Here
+            </a>
+        </div>
+    </section>
+
+    <!-- Thank You Message -->
+    <section class="card text-center bg-warning">
+        <div class="text-3xl mb-2">🙏</div>
+        <p class="text-base text-primary font-medium">
+            Thank you for choosing our customer support system. We look forward to helping you provide excellent service to your customers!
+        </p>
+    </section>
+
+</div>
+{% endblock %}

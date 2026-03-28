@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Company - E Customer Support{% endblock %}
+
+{% block content %}
+<div class="container container-md animate-fade-in">
+    
+    <!-- Page Header -->
+    <div class="card text-center mb-6 bg-gradient">
+        <div class="text-5xl mb-3">✏️</div>
+        <h1 class="text-2xl font-bold text-primary mb-2">
+            Edit Company Profile
+        </h1>
+        <p class="text-sm text-primary opacity-90">
+            Update your company information and business details
+        </p>
+    </div>
+
+    <!-- Edit Form Card -->
+    <div class="card mb-6">
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Section 1: Basic Information -->
+            <div>
+                <h2 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                    <span>🏢</span> Basic Information
+                </h2>
+                
+                <div class="grid grid-2 gap-4">
+                    <!-- Company Name -->
+                    <div class="form-group">
+                        <label for="company_name" class="form-label">
+                            <span>🏷️</span> Company Name <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="company_name" 
+                            name="company_name" 
+                            class="form-input" 
+                            value="{{ company.company_name }}"
+                            placeholder="Enter company name"
+                            required
+                        >
+                    </div>
+
+                    <!-- Business Type -->
+                    <div class="form-group">
+                        <label for="business_type" class="form-label">
+                            <span>💼</span> Business Type <span class="text-error">*</span>
+                        </label>
+                        <select 
+                            id="business_type" 
+                            name="business_type" 
+                            class="form-select"
+                            required
+                        >
+                            <option value="">Select Business Type</option>
+                            <option value="retail" {% if company.business_type == 'retail' %}selected{% endif %}>🛍️ Retail</option>
+                            <option value="service" {% if company.business_type == 'service' %}selected{% endif %}>🤝 Services</option>
+                            <option value="manufacturing" {% if company.business_type == 'manufacturing' %}selected{% endif %}>🏭 Manufacturing</option>
+                            <option value="technology" {% if company.business_type == 'technology' %}selected{% endif %}>💻 Technology</option>
+                            <option value="other" {% if company.business_type == 'other' %}selected{% endif %}>📦 Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Contact Information -->
+            <div>
+                <h2 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                    <span>📞</span> Contact Information
+                </h2>
+                
+                <div class="grid grid-2 gap-4">
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <span>📧</span> Company Email <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-input" 
+                            value="{{ company.email }}"
+                            placeholder="your@company.com"
+                            required
+                        >
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="form-group">
+                        <label for="phone" class="form-label">
+                            <span>📱</span> Company Phone <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            name="phone" 
+                            class="form-input" 
+                            value="{{ company.phone }}"
+                            placeholder="+91 1234567890"
+                            required
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Business Details -->
+            <div>
+                <h2 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                    <span>📍</span> Business Details
+                </h2>
+                
+                <!-- Address Line 1 -->
+                <div class="form-group">
+                    <label for="address_line1" class="form-label">
+                        <span>🏠</span> Address Line 1 <span class="text-error">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="address_line1" 
+                        name="address_line1" 
+                        class="form-input" 
+                        value="{{ company.address_line1 }}"
+                        placeholder="Street address, P.O. box, company name"
+                        required
+                    >
+                </div>
+
+                <!-- Address Line 2 -->
+                <div class="form-group">
+                    <label for="address_line2" class="form-label">
+                        <span>🏢</span> Address Line 2 <span class="text-muted">(Optional)</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="address_line2" 
+                        name="address_line2" 
+                        class="form-input" 
+                        value="{{ company.address_line2 }}"
+                        placeholder="Apartment, suite, unit, building, floor"
+                    >
+                </div>
+
+                <!-- City, State, Pincode -->
+                <div class="grid grid-3 gap-4">
+                    <div class="form-group">
+                        <label for="city" class="form-label">
+                            <span>🏙️</span> City <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="city" 
+                            name="city" 
+                            class="form-input" 
+                            value="{{ company.city }}"
+                            placeholder="e.g., Mumbai"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state" class="form-label">
+                            <span>🗺️</span> State / Province <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="state" 
+                            name="state" 
+                            class="form-input" 
+                            value="{{ company.state }}"
+                            placeholder="e.g., Maharashtra"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pincode" class="form-label">
+                            <span>📮</span> Pincode / ZIP <span class="text-error">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="pincode" 
+                            name="pincode" 
+                            class="form-input" 
+                            value="{{ company.pincode }}"
+                            placeholder="e.g., 400001"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Country -->
+                <div class="form-group">
+                    <label for="country" class="form-label">
+                        <span>🌍</span> Country <span class="text-error">*</span>
+                    </label>
+                    <select 
+                        id="country" 
+                        name="country" 
+                        class="form-select"
+                        required
+                    >
+                        <option value="">-- Select Country --</option>
+                        <option value="India" {% if company.country == "India" %}selected{% endif %}>🇮🇳 India</option>
+                        <option value="United States" {% if company.country == "United States" %}selected{% endif %}>🇺🇸 United States</option>
+                        <option value="Canada" {% if company.country == "Canada" %}selected{% endif %}>🇨🇦 Canada</option>
+                        <option value="United Kingdom" {% if company.country == "United Kingdom" %}selected{% endif %}>🇬🇧 United Kingdom</option>
+                        <option value="Australia" {% if company.country == "Australia" %}selected{% endif %}>🇦🇺 Australia</option>
+                    </select>
+                </div>
+
+                <!-- GST Number -->
+                <div class="form-group">
+                    <label for="gst_number" class="form-label">
+                        <span>📄</span> GST Number <span class="text-error">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="gst_number" 
+                        name="gst_number" 
+                        class="form-input" 
+                        value="{{ company.gst_number }}"
+                        placeholder="Enter GST identification number"
+                        required
+                    >
+                    <div class="form-hint">Format: 22AAAAA0000A1Z5</div>
+                </div>
+            </div>
+
+            <!-- Section 4: Company Description -->
+            <div>
+                <h2 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                    <span>📝</span> Company Description
+                </h2>
+                
+                <div class="form-group">
+                    <label for="description" class="form-label">
+                        <span>💭</span> Description <span class="text-muted">(Optional)</span>
+                    </label>
+                    <textarea 
+                        id="description" 
+                        name="description" 
+                        class="form-textarea" 
+                        rows="5"
+                        placeholder="Tell us about your company and services..."
+                    >{{ company.description }}</textarea>
+                    <div class="form-hint">Brief description about your company and services</div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex gap-4 flex-wrap pt-4 border-top">
+                <button type="submit" class="btn btn-success flex-1">
+                    💾 Update Company Profile
+                </button>
+                <a href="{% url 'company_dashboard' company.slug %}" class="btn btn-outline flex-1">
+                    ❌ Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Info Notice -->
+    <div class="card bg-info border-left-info">
+        <div class="flex items-start gap-4">
+            <div class="text-3xl">ℹ️</div>
+            <div>
+                <h3 class="text-base font-bold text-primary mb-1">Important Information</h3>
+                <p class="text-sm text-secondary">
+                    All changes will be reviewed and updated in your company profile. Your customers will see the updated information immediately.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

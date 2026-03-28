@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Rate Your Experience - {{ company.company_name }}{% endblock %}
+
+{% block content %}
+<div class="container container-sm animate-fade-in">
+    
+    <!-- Form Header -->
+    <div class="card text-center mb-6 bg-gradient">
+        <div class="text-5xl mb-3 animate-bounce">⭐</div>
+        <h1 class="text-2xl font-bold text-white mb-2">
+            Rate Your Experience
+        </h1>
+        <p class="text-sm text-white opacity-90">
+            Help us improve our service
+        </p>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+        <div class="message {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}">
+            {% if message.tags == 'success' %}✅{% elif message.tags == 'error' %}❌{% elif message.tags == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Complaint Info Card -->
+    <div class="card mb-6 border-left-primary">
+        <p class="text-sm mb-2"><strong>Regarding:</strong> {{ complaint.subject }}</p>
+        <p class="text-sm mb-2"><strong>Submitted:</strong> {{ complaint.submitted_at|date:"F d, Y" }}</p>
+        <p class="text-sm mb-0"><strong>From:</strong> {{ complaint.name }}</p>
+    </div>
+
+    <!-- Feedback Form -->
+    <div class="card">
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Star Rating -->
+            <div class="form-group mb-6">
+                <label class="form-label text-center block mb-2">
+                    Your Rating <span class="text-error">*</span>
+                </label>
+                
+                <!-- Hidden input for form submission -->
+                <input type="hidden" name="rating" id="id_rating" value="{{ form.rating.value|default:'' }}" required>
+                
+                <!-- CSS-Only Star Rating (reverse order for fill effect) -->
+                <div class="star-rating">
+                    <input type="radio" name="rating" id="star5" value="5" {% if form.rating.value == "5" %}checked{% endif %}>
+                    <label for="star5" title="5 stars - Excellent"></label>
+                    
+                    <input type="radio" name="rating" id="star4" value="4" {% if form.rating.value == "4" %}checked{% endif %}>
+                    <label for="star4" title="4 stars - Good"></label>
+                    
+                    <input type="radio" name="rating" id="star3" value="3" {% if form.rating.value == "3" %}checked{% endif %}>
+                    <label for="star3" title="3 stars - Average"></label>
+                    
+                    <input type="radio" name="rating" id="star2" value="2" {% if form.rating.value == "2" %}checked{% endif %}>
+                    <label for="star2" title="2 stars - Poor"></label>
+                    
+                    <input type="radio" name="rating" id="star1" value="1" {% if form.rating.value == "1" %}checked{% endif %}>
+                    <label for="star1" title="1 star - Terrible"></label>
+                </div>
+                
+                <p class="star-hint">Click to select your rating</p>
+                
+                {% if form.rating.errors %}
+                <div class="form-error text-center">{{ form.rating.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Optional Message -->
+            <div class="form-group mb-6">
+                <label for="id_message" class="form-label">
+                    Additional Comments <span class="text-muted">(Optional)</span>
+                </label>
+                <textarea 
+                    id="id_message" 
+                    name="message" 
+                    class="form-textarea"
+                    rows="5"
+                    placeholder="Tell us more about your experience..."
+                >{{ form.message.value|default:'' }}</textarea>
+                {% if form.message.errors %}
+                <div class="form-error">{{ form.message.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary btn-lg w-100 mb-4">
+                Submit Feedback ⭐
+            </button>
+        </form>
+    </div>
+
+    <!-- Footer Link -->
+    <div class="text-center mt-6">
+        <a href="{% url 'home' %}" class="text-primary hover:underline text-sm">
+            ← Back to Home
+        </a>
+    </div>
+
+</div>
+{% endblock %}

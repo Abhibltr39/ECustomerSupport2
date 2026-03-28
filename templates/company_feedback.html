@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Customer Feedback - {{ company.company_name }}{% endblock %}
+
+{% block content %}
+<div class="container container-md animate-fade-in">
+    
+    <!-- Page Header -->
+    <div class="flex items-center gap-4 mb-6 flex-wrap">
+        <a href="{% url 'company_dashboard' company.slug %}" class="btn btn-outline btn-sm">
+            ← Back to Dashboard
+        </a>
+        <div class="flex-1">
+            <h1 class="text-2xl font-bold text-primary">⭐ Customer Feedback</h1>
+            <p class="text-sm text-secondary">{{ company.company_name }} - All Ratings & Reviews</p>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-3 gap-4 mb-6">
+        <div class="card text-center border-left-primary">
+            <div class="text-3xl mb-2">📊</div>
+            <div class="text-2xl font-bold text-primary">{{ total_feedback }}</div>
+            <div class="text-xs text-secondary">Total Feedback</div>
+        </div>
+        <div class="card text-center border-left-warning">
+            <div class="text-3xl mb-2">⭐</div>
+            <div class="text-2xl font-bold text-warning">{{ avg_rating }}/5</div>
+            <div class="text-xs text-secondary">Average Rating</div>
+        </div>
+        <div class="card text-center border-left-success">
+            <div class="text-3xl mb-2">📈</div>
+            <div class="text-2xl font-bold text-success">
+                {% if total_feedback > 0 %}
+                    {{ rating_breakdown.5|add:rating_breakdown.4 }}/{{ total_feedback }}
+                {% else %}
+                    0
+                {% endif %}
+            </div>
+            <div class="text-xs text-secondary">Positive (4-5★)</div>
+        </div>
+    </div>
+
+    <!-- Rating Distribution -->
+    <div class="card mb-6">
+        <h2 class="text-lg font-bold text-primary mb-4">📊 Rating Distribution</h2>
+        
+        {% if total_feedback > 0 %}
+        <div class="space-y-3">
+            <!-- 5 Stars -->
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-primary w-12">5★</span>
+                <div class="flex-1 h-3 bg-bg rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient" style="width: {% if total_feedback > 0 %}{{ rating_breakdown.5|floatformat:0 }}%{% else %}0%{% endif %}"></div>
+                </div>
+                <span class="text-sm text-secondary w-12 text-right">{{ rating_breakdown.5 }}</span>
+            </div>
+            
+            <!-- 4 Stars -->
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-primary w-12">4★</span>
+                <div class="flex-1 h-3 bg-bg rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient" style="width: {% if total_feedback > 0 %}{{ rating_breakdown.4|floatformat:0 }}%{% else %}0%{% endif %}"></div>
+                </div>
+                <span class="text-sm text-secondary w-12 text-right">{{ rating_breakdown.4 }}</span>
+            </div>
+            
+            <!-- 3 Stars -->
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-primary w-12">3★</span>
+                <div class="flex-1 h-3 bg-bg rounded-full overflow-hidden">
+                    <div class="h-full bg-warning" style="width: {% if total_feedback > 0 %}{{ rating_breakdown.3|floatformat:0 }}%{% else %}0%{% endif %}"></div>
+                </div>
+                <span class="text-sm text-secondary w-12 text-right">{{ rating_breakdown.3 }}</span>
+            </div>
+            
+            <!-- 2 Stars -->
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-primary w-12">2★</span>
+                <div class="flex-1 h-3 bg-bg rounded-full overflow-hidden">
+                    <div class="h-full bg-error" style="width: {% if total_feedback > 0 %}{{ rating_breakdown.2|floatformat:0 }}%{% else %}0%{% endif %}"></div>
+                </div>
+                <span class="text-sm text-secondary w-12 text-right">{{ rating_breakdown.2 }}</span>
+            </div>
+            
+            <!-- 1 Star -->
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-primary w-12">1★</span>
+                <div class="flex-1 h-3 bg-bg rounded-full overflow-hidden">
+                    <div class="h-full bg-error" style="width: {% if total_feedback > 0 %}{{ rating_breakdown.1|floatformat:0 }}%{% else %}0%{% endif %}"></div>
+                </div>
+                <span class="text-sm text-secondary w-12 text-right">{{ rating_breakdown.1 }}</span>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-10">
+            <div class="text-5xl mb-3">📊</div>
+            <p class="text-secondary">No feedback yet to display distribution.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Recent Feedback -->
+    <div class="card">
+        <h2 class="text-lg font-bold text-primary mb-4">💬 Recent Feedback</h2>
+        
+        {% if feedback_items %}
+        <div class="space-y-4">
+            {% for feedback in feedback_items %}
+            <div class="border-bottom pb-4 mb-4 last:border-0 last:pb-0 last:mb-0">
+                <!-- Rating Header -->
+                <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="text-warning">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= feedback.rating %}★{% else %}☆{% endif %}
+                            {% endfor %}
+                        </div>
+                        <span class="text-sm text-secondary">({{ feedback.rating }}/5)</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-secondary">
+                        <span>📅 {{ feedback.submitted_at|date:"M d, Y" }}</span>
+                        <div class="w-8 h-8 rounded-full bg-gradient text-white flex items-center justify-center font-bold text-sm">
+                            {{ feedback.complaint.name|first|upper }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Info -->
+                <div class="mb-3">
+                    <p class="text-sm font-bold text-primary">{{ feedback.complaint.name }}</p>
+                    <p class="text-xs text-secondary">📧 {{ feedback.complaint.email }}</p>
+                </div>
+
+                <!-- Complaint Details -->
+                <div class="mb-3 p-3 bg-bg rounded-md">
+                    <p class="text-xs text-muted mb-1">Regarding:</p>
+                    <p class="text-sm font-medium text-primary mb-2">{{ feedback.complaint.subject }}</p>
+                    <p class="text-sm text-secondary">{{ feedback.complaint.message|truncatechars:200 }}</p>
+                </div>
+
+                <!-- Customer's Feedback -->
+                {% if feedback.message %}
+                <div class="mb-3 p-3 bg-bg rounded-md border-left-primary">
+                    <p class="text-xs text-muted mb-1">Customer's Feedback:</p>
+                    <p class="text-sm text-secondary">{{ feedback.message }}</p>
+                </div>
+                {% endif %}
+
+                <!-- Status & Action -->
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    {% if feedback.complaint.is_resolved %}
+                    <span class="badge badge-success">✅ Resolved</span>
+                    {% else %}
+                    <span class="badge badge-warning">⏳ Pending</span>
+                    {% endif %}
+                    
+                    <a href="{% url 'company_dashboard' company.slug %}#complaint-{{ feedback.complaint.id }}" class="btn btn-sm btn-outline">
+                        👁️ View Complaint
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-10">
+            <div class="text-5xl mb-3">⭐</div>
+            <h3 class="text-lg font-bold text-primary mb-2">No Feedback Yet</h3>
+            <p class="text-sm text-secondary mb-4">
+                Customers haven't submitted any ratings yet. Keep providing great service!
+            </p>
+            <a href="{% url 'company_dashboard' company.slug %}" class="btn btn-outline">
+                ← Back to Dashboard
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

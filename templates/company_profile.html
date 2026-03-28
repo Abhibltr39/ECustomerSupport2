@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Company Profile - E Customer Support{% endblock %}
+
+{% block content %}
+<div class="container container-md animate-fade-in">
+    
+    <!-- Profile Header -->
+    <div class="card text-center mb-6 bg-gradient">
+        <div class="text-5xl mb-3">🏢</div>
+        <h1 class="text-2xl font-bold text-primary mb-2">
+            Company Profile
+        </h1>
+        <p class="text-sm text-primary opacity-90">
+            View and manage your company information
+        </p>
+    </div>
+
+    <!-- Company Info Card -->
+    <div class="card mb-6">
+        <!-- Company Logo & Name -->
+        <div class="text-center mb-6 pb-6 border-bottom">
+            <div class="text-6xl mb-4">
+                {% if company.logo %}
+                    <img src="{{ company.logo.url }}" alt="{{ company.company_name }}" class="w-32 h-32 rounded-full mx-auto object-cover bg-white p-3 shadow-md">
+                {% else %}
+                    🏢
+                {% endif %}
+            </div>
+            <h2 class="text-2xl font-bold text-primary mb-2">{{ company.company_name }}</h2>
+            <span class="badge badge-primary">{{ company.get_business_type_display }}</span>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="mb-6">
+            <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                <span>📞</span> Contact Information
+            </h3>
+            <div class="grid grid-2 gap-4">
+                <div class="flex items-center gap-3 p-4 bg-bg rounded-md">
+                    <div class="text-3xl">📧</div>
+                    <div>
+                        <p class="text-xs text-muted">Email Address</p>
+                        <p class="text-sm font-medium text-primary">{{ company.email }}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 p-4 bg-bg rounded-md">
+                    <div class="text-3xl">📱</div>
+                    <div>
+                        <p class="text-xs text-muted">Phone Number</p>
+                        <p class="text-sm font-medium text-primary">{{ company.phone }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Information -->
+        <div class="mb-6">
+            <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                <span>💼</span> Business Information
+            </h3>
+            <div class="space-y-4">
+                <div class="flex items-start gap-3 p-4 bg-bg rounded-md">
+                    <div class="text-3xl">🏠</div>
+                    <div>
+                        <p class="text-xs text-muted">Company Address</p>
+                        <p class="text-sm font-medium text-primary">
+                            {{ company.address_line1 }}
+                            {% if company.address_line2 %}
+                                <br>{{ company.address_line2 }}
+                            {% endif %}
+                            <br>{{ company.city }}, {{ company.state }} - {{ company.pincode }}
+                            <br>{{ company.country }}
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 p-4 bg-bg rounded-md">
+                    <div class="text-3xl">📄</div>
+                    <div>
+                        <p class="text-xs text-muted">GST Number</p>
+                        <p class="text-sm font-medium text-primary font-mono">{{ company.gst_number }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Description -->
+        <div class="mb-6">
+            <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                <span>📝</span> Company Description
+            </h3>
+            <div class="p-4 bg-bg rounded-md">
+                {% if company.description %}
+                    <p class="text-sm text-secondary leading-relaxed">{{ company.description }}</p>
+                {% else %}
+                    <p class="text-sm text-muted italic">No description provided yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4 flex-wrap pt-6 border-top">
+            <a href="{% url 'edit_company' company.slug %}" class="btn btn-success flex-1">
+                ✏️ Edit Company Information
+            </a>
+            <a href="{% url 'company_dashboard' company.slug %}" class="btn btn-outline flex-1">
+                📊 Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Info Cards -->
+    <div class="grid grid-4 gap-4">
+        <div class="card text-center p-4">
+            <div class="text-3xl mb-2">📧</div>
+            <p class="text-xs text-muted mb-1">Verified Email</p>
+            <p class="text-sm font-medium text-primary">{{ company.email }}</p>
+        </div>
+        <div class="card text-center p-4">
+            <div class="text-3xl mb-2">📱</div>
+            <p class="text-xs text-muted mb-1">Phone Number</p>
+            <p class="text-sm font-medium text-primary">{{ company.phone }}</p>
+        </div>
+        <div class="card text-center p-4">
+            <div class="text-3xl mb-2">🏢</div>
+            <p class="text-xs text-muted mb-1">Business Type</p>
+            <p class="text-sm font-medium text-primary">{{ company.get_business_type_display }}</p>
+        </div>
+        <div class="card text-center p-4">
+            <div class="text-3xl mb-2">📄</div>
+            <p class="text-xs text-muted mb-1">GST Registered</p>
+            <p class="text-sm font-medium text-primary">{{ company.gst_number }}</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

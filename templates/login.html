@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - E Customer Support{% endblock %}
+
+{% block content %}
+<div class="container container-sm animate-fade-in">
+    
+    <!-- Login Card -->
+    <div class="card">
+        
+        <!-- Header -->
+        <div class="card-header text-center">
+            <div class="text-5xl mb-3">🔐</div>
+            <h1 class="text-2xl font-bold text-primary mb-2">
+                Company Login
+            </h1>
+            <p class="text-sm text-secondary">
+                Access your dashboard to manage your company
+            </p>
+        </div>
+
+        <!-- Login Form -->
+        <form method="POST" class="my-4">
+            {% csrf_token %}
+            
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email" class="form-label">
+                    <span>📧</span> Email Address
+                </label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="form-input" 
+                    placeholder="your@company.com"
+                    required
+                    autofocus
+                >
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password" class="form-label">
+                    <span>🔑</span> Password
+                </label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-input" 
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex items-center justify-between mb-4">
+                <label class="flex items-center gap-2 text-sm text-secondary cursor-pointer">
+                    <input type="checkbox" name="remember" class="form-checkbox">
+                    Remember me
+                </label>
+                <a href="#" class="text-sm text-primary hover:underline">
+                    Forgot Password?
+                </a>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-success btn-lg w-100 mb-4">
+                🚀 Login to Dashboard
+            </button>
+        </form>
+
+        <!-- Register Link -->
+        <div class="card-footer text-center">
+            <p class="text-sm text-secondary mb-3">
+                Don't have an account?
+            </p>
+            <a href="{% url 'user_register' %}" class="btn btn-outline">
+                ✨ Register Yourself
+            </a>
+        </div>
+
+        <!-- Security Info -->
+        <div class="text-center mt-4 pt-4 border-top">
+            <p class="text-xs text-muted mb-1">
+                🔒 Secure login with 256-bit encryption
+            </p>
+            <p class="text-xs text-muted">
+                Need help? <a href="#" class="text-primary">Contact Support</a>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
