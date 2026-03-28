@@ -24,7 +24,7 @@ urlpatterns = [
     path('form/<str:unique_id>/', views.customer_form, name='customer_form'),
     
     # Feedback (with star rating)
-    path('feedback/<uuid:token>/', views.submit_feedback, name='submit_feedback'),
+    path('feedback/<str:token>/', views.submit_feedback, name='submit_feedback'),
     # urls.py
     path('dashboard/company/<slug:slug>/feedback/', views.company_feedback_list, name='company_feedback'),
 ]

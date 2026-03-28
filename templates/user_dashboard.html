@@ -5,24 +5,25 @@
 
 {% block content %}
 <div class="container animate-fade-in">
-    
+
     <!-- Dashboard Header -->
     <div class="card bg-gradient mb-6">
         <div class="flex items-center justify-between flex-wrap gap-4">
             <div>
                 <h1 class="text-2xl font-bold text-primary mb-2">
-                    Welcome back, {{ user.username }}! 👋
+                    Welcome, {{ user.username }}! 👋
                 </h1>
                 <p class="text-sm text-primary opacity-90">
                     Manage all your companies from one place
                 </p>
             </div>
-            <a href="{% url 'create_company' %}" class="btn btn-lg" style="background: white; color: var(--color-primary);">
+            <a href="{% url 'create_company' %}" class="btn btn-lg"
+                style="background: white; color: var(--color-primary);">
                 ➕ Create New Company
             </a>
             <a href="{% url 'logout' %}" class="btn btn-sm btn-error">
-                    🚪 Logout
-                </a>
+                🚪 Logout
+            </a>
         </div>
     </div>
 
@@ -31,7 +32,7 @@
         <!-- Total Companies -->
         <div class="card text-center border-left-primary">
             <div class="text-4xl mb-2">🏢</div>
-            <div class="text-3xl font-bold text-primary mb-1">{{ companies.count }}</div>
+            <div class="text-3xl font-bold text-primary mb-1">{{ total_companies }}</div>
             <div class="text-sm text-secondary">Total Companies</div>
         </div>
 
@@ -45,92 +46,93 @@
         <!-- Registered Email -->
         <div class="card text-center border-left-info">
             <div class="text-4xl mb-2">📧</div>
-            <div class="text-lg font-bold text-primary mb-1">{{ user.email|truncatechars:20 }}</div>
+            <div class="text-lg font-bold text-primary mb-1">{{ user.username|truncatechars:20 }}</div>
             <div class="text-sm text-secondary">Registered Email</div>
         </div>
     </div>
 
     <!-- Companies Section -->
-    <div class="mb-6">
-        <h2 class="text-xl font-bold text-primary mb-4 flex items-center gap-2">
-            <span>🏢</span> Your Companies
-        </h2>
+<div class="mb-6">
+    <h2 class="text-xl font-bold text-primary mb-4 flex items-center gap-2">
+        <span>🏢</span> Your Companies
+    </h2>
 
-        {% if companies %}
-        <div class="grid grid-2 gap-5">
-            {% for company in companies %}
-            <div class="card">
-                <!-- Company Header -->
-                <div class="card-header text-center bg-bg rounded-md mb-4">
-                    <div class="text-5xl mb-3">
-                        {% if company.logo %}
-                            <img src="{{ company.logo.url }}" alt="{{ company.company_name }}" class="w-20 h-20 rounded-full mx-auto object-cover">
-                        {% else %}
-                            🏢
-                        {% endif %}
-                    </div>
-                    <h3 class="text-lg font-bold text-primary mb-1">{{ company.company_name }}</h3>
-                    <span class="badge badge-primary">{{ company.get_business_type_display }}</span>
+    {% if company_data %}
+    <div class="grid grid-2 gap-5">
+        {% for item in company_data %}
+        <div class="card">
+            <!-- Company Header -->
+            <div class="card-header text-center bg-light rounded-md mb-4">
+                <div class="text-5xl mb-3">
+                    {% if item.company.logo %}
+                    <img src="{{ item.company.logo.url }}" alt="{{ item.company.company_name }}" class="company-logo w-20 h-20 object-cover">
+                    {% else %}
+                    🏢
+                    {% endif %}
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-1">{{ item.company.company_name }}</h3>
+                <span class="badge badge-primary">{{ item.company.get_business_type_display }}</span>
+            </div>
+
+            <!-- Company Body -->
+            <div class="card-body">
+                <div class="text-sm text-secondary mb-4">
+                    <p class="flex items-center gap-2 mb-2">
+                        <span>📧</span> {{ item.company.email }}
+                    </p>
+                    <p class="flex items-center gap-2 mb-2">
+                        <span>📞</span> {{ item.company.phone }}
+                    </p>
+                    <p class="flex items-center gap-2">
+                        <span>📍</span> {{ item.company.city }}, {{ item.company.state }}
+                    </p>
                 </div>
 
-                <!-- Company Body -->
-                <div class="card-body">
-                    <div class="text-sm text-secondary mb-4">
-                        <p class="flex items-center gap-2 mb-2">
-                            <span>📧</span> {{ company.company_email }}
-                        </p>
-                        <p class="flex items-center gap-2 mb-2">
-                            <span>📞</span> {{ company.company_phone }}
-                        </p>
-                        <p class="flex items-center gap-2">
-                            <span>📍</span> {{ company.city }}, {{ company.state }}
-                        </p>
+                <!-- Company Stats -->
+                <div class="grid grid-3 gap-3 py-3 border-top border-bottom mb-4">
+                    <div class="text-center">
+                        <div class="text-xl font-bold text-primary">{{ item.total_complaints|default:0 }}</div>
+                        <div class="text-xs text-muted">Complaints</div>
                     </div>
+                    <div class="text-center">
+                        <div class="text-xl font-bold text-success">{{ item.resolved_complaints|default:0 }}</div>
+                        <div class="text-xs text-muted">Resolved</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xl font-bold text-warning">{{ item.total_feedback|default:0 }}</div>
+                        <div class="text-xs text-muted">Feedback</div>
+                    </div>
+                </div>
 
-                    <!-- Company Stats -->
-                    <div class="grid grid-3 gap-3 py-3 border-top border-bottom mb-4">
-                        <div class="text-center">
-                            <div class="text-xl font-bold text-primary">{{ total_complaints|default:0 }}</div>
-                            <div class="text-xs text-muted">Complaints</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-xl font-bold text-success">{{ resolved_complaints|default:0 }}</div>
-                            <div class="text-xs text-muted">Resolved</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-xl font-bold text-warning">{{ total_feedback|default:0 }}</div>
-                            <div class="text-xs text-muted">Feedback</div>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="flex gap-3">
-                        <a href="{% url 'company_dashboard' company.slug %}" class="btn btn-success btn-sm flex-1">
-                            📊 Manage Dashboard
-                        </a>
-                        <a href="{% url 'company_profile' company.slug %}" class="btn btn-outline btn-sm flex-1">
-                            👤 Profile
-                        </a>
-                    </div>
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <a href="{% url 'company_dashboard' item.company.slug %}" class="btn btn-success btn-sm flex-1">
+                        📊 Manage Dashboard
+                    </a>
+                    <a href="{% url 'company_profile' item.company.slug %}" class="btn btn-outline btn-sm flex-1">
+                        👤 Profile
+                    </a>
                 </div>
             </div>
-            {% endfor %}
         </div>
-
-        {% else %}
-        <!-- Empty State -->
-        <div class="card text-center py-10">
-            <div class="text-6xl mb-4">🏢</div>
-            <h3 class="text-xl font-bold text-primary mb-2">No Companies Yet</h3>
-            <p class="text-sm text-secondary mb-4 max-w-md mx-auto">
-                You haven't created any companies yet. Create your first company to start managing complaints and feedback.
-            </p>
-            <a href="{% url 'create_company' %}" class="btn btn-primary">
-                ➕ Create Your First Company
-            </a>
-        </div>
-        {% endif %}
+        {% endfor %}
     </div>
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="card text-center py-10">
+        <div class="text-6xl mb-4">🏢</div>
+        <h3 class="text-xl font-bold text-primary mb-2">No Companies Yet</h3>
+        <p class="text-sm text-secondary mb-4 max-w-md mx-auto">
+            You haven't created any companies yet. Create your first company to start managing complaints and
+            feedback.
+        </p>
+        <a href="{% url 'create_company' %}" class="btn btn-primary">
+            ➕ Create Your First Company
+        </a>
+    </div>
+    {% endif %}
+</div>
 
     <!-- Quick Actions -->
     <div class="card">

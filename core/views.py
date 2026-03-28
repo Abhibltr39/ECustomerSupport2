@@ -128,15 +128,39 @@ def logout_view(request):
 @login_required
 def user_dashboard(request):
     companies = request.user.companies.all()
-    
-    # Calculate stats
     total_companies = companies.count()
-    
+
+    company_data = []
+
+    for company in companies:
+        # 🔥 total complaints for this company
+        total_complaints = Complaint.objects.filter(
+            form_link__company=company
+        ).count()
+
+        # 🔥 resolved complaints
+        resolved_complaints = Complaint.objects.filter(
+            form_link__company=company,
+            is_resolved=True
+        ).count()
+
+        # 🔥 feedback count
+        total_feedback = Feedback.objects.filter(
+            complaint__form_link__company=company
+        ).count()
+
+        company_data.append({
+            'company': company,
+            'total_complaints': total_complaints,
+            'resolved_complaints': resolved_complaints,
+            'total_feedback': total_feedback,
+        })
+
     context = {
-        'companies': companies,
-        'total_companies': total_companies,
+        'company_data': company_data,
+        'total_companies': companies.count(),
     }
-    
+
     return render(request, 'user_dashboard.html', context)
 
 @login_required
@@ -402,9 +426,19 @@ def customer_form(request, unique_id):
 # ✅ This is your final, correct submit_feedback view:
 def submit_feedback(request, token):
     """Customer submits star rating feedback"""
-    complaint = get_object_or_404(Complaint, feedback_token=token)
     
-    # Check if feedback already exists
+    # 🔧 Convert string token to UUID for proper database lookup
+    try:
+        token_uuid = uuid.UUID(token)  # Convert string to UUID object
+    except (ValueError, AttributeError):
+        # If conversion fails, token is invalid
+        messages.error(request, "Invalid or expired feedback link.")
+        return redirect('home')
+    
+    # ✅ Now query with proper UUID type
+    complaint = get_object_or_404(Complaint, feedback_token=token_uuid)
+    
+    # Rest of your view...
     if hasattr(complaint, 'feedback'):
         messages.info(request, "You have already submitted feedback for this complaint.")
         return redirect('home')
@@ -430,7 +464,6 @@ def submit_feedback(request, token):
         'form': form,
         'complaint': complaint
     })
-
 # views.py - Add this new function
 
 # views.py - company_feedback_list function

@@ -5,10 +5,12 @@
 
 {% block content %}
 <div class="container animate-fade-in">
-    
+
     <!-- Hero Section -->
     <section class="card text-center mb-6 bg-gradient">
-        <div class="text-5xl mb-4">🎧</div>
+        <div class="hero-logo">
+            <img src="{% static 'images/logo.png' %}" alt="Logo">
+        </div>
         <h1 class="text-3xl font-bold text-primary mb-2">
             Welcome to Customer Support System
         </h1>
@@ -24,7 +26,8 @@
             <div class="text-4xl mb-3">💬</div>
             <h2 class="text-xl font-semibold text-primary mb-2">Manage Inquiries</h2>
             <p class="text-sm text-secondary">
-                Our customer support system is designed to help you manage and respond to customer inquiries efficiently.
+                Our customer support system is designed to help you manage and respond to customer inquiries
+                efficiently.
             </p>
         </div>
 
@@ -50,7 +53,7 @@
     <!-- Action Section -->
     <section class="grid grid-2 gap-5 mb-6">
         <!-- Login Box -->
-        <div class="card border-left-primary">
+        <div class="card text-center border-left-primary">
             <h3 class="text-lg font-semibold text-primary mb-2">
                 Already Have an Account?
             </h3>
@@ -63,7 +66,7 @@
         </div>
 
         <!-- Register Box -->
-        <div class="card border-left-success">
+        <div class="card text-center border-left-success">
             <h3 class="text-lg font-semibold text-primary mb-2">
                 New to Our System?
             </h3>
@@ -80,7 +83,8 @@
     <section class="card text-center bg-warning">
         <div class="text-3xl mb-2">🙏</div>
         <p class="text-base text-primary font-medium">
-            Thank you for choosing our customer support system. We look forward to helping you provide excellent service to your customers!
+            Thank you for choosing our customer support system. We look forward to helping you provide excellent service
+            to your customers!
         </p>
     </section>
 

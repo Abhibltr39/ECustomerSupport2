@@ -13,14 +13,23 @@
 <body class="flex flex-col min-h-screen">
 
     <!-- Navigation -->
-    <header class="bg-gradient py-4 shadow-md sticky top-0 z-50">
-        <nav class="container flex items-center justify-center">
-            <a href="{% url 'home' %}" class="text-white text-xl font-bold flex items-center gap-2">
-                <span>🎯</span>
-                E Customer Support
-            </a>
-        </nav>
-    </header>
+   <header class="bg-gradient py-4 shadow-md sticky top-0 z-50">
+    <nav class="container flex items-center justify-center">
+        
+        <a href="{% url 'home' %}" class="nav-logo">
+            
+            <!-- LOGO -->
+            <div class="logo-container">
+                <img src="{% static 'images/logo.png' %}" alt="Logo">
+            </div>
+
+            <!-- TEXT -->
+            <span>E Customer Support</span>
+
+        </a>
+
+    </nav>
+</header>
 
     <!-- Messages -->
     {% if messages %}
@@ -40,12 +49,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-primary-dark text-white py-6 mt-auto">
+    <footer class="bg-primary-dark text-primary py-6 mt-auto">
         <div class="container text-center">
             <div class="flex justify-center gap-6 mb-4 flex-wrap">
-                <a href="#" class="text-white hover:text-primary-light font-medium">Privacy Policy</a>
-                <a href="#" class="text-white hover:text-primary-light font-medium">Terms of Service</a>
-                <a href="#" class="text-white hover:text-primary-light font-medium">Contact Us</a>
+                <a href="#" class="hover:text-primary-light font-medium">Privacy Policy</a>
+                <a href="#" class="hover:text-primary-light font-medium">Terms of Service</a>
+                <a href="#" class="hover:text-primary-light font-medium">Contact Us</a>
             </div>
             <p class="text-sm opacity-90">
                 &copy; {% now "Y" %} E-Customer Support. All rights reserved.

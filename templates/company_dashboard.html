@@ -11,7 +11,7 @@
         <div class="flex items-center gap-4 flex-wrap">
             <div class="text-5xl">
                 {% if company.logo %}
-                    <img src="{{ company.logo.url }}" alt="{{ company.company_name }}" class="w-20 h-20 rounded-full object-cover bg-white p-2">
+                    <img src="{{ company.logo.url }}" alt="{{ company.company_name }}" class="company-logo">
                 {% else %}
                     🏢
                 {% endif %}
